@@ -6,9 +6,9 @@ Route::get('/', function () {
     return view('inicio');
 })->name('inicio');
 
-Route::get('/menus', function() {
-    return view('menus');
-})->name('menus');
+Route::get('/menu', function() {
+    return view('menu');
+})->name('menu');
 
 Route::get('/reservas', function() {
     return view('reservas');
