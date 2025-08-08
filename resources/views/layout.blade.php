@@ -3,34 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Restaurante Laravel</title>
-    <style>
-        nav {
-            background-color: #333;
-            padding: 2rem;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 1rem;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            padding: 2rem;
-        }
-    </style>
 </head>
 <body>
 
