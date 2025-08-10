@@ -10,6 +10,15 @@
     <form action="{{ route('reservas.enviar') }}" method="POST">
         @csrf
 
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" name="nombre" id="nombre" required><br><br>
+
+        <label for="telefono">Teléfono:</label><br>
+        <input type="tel" name="telefono" id="telefono" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" name="email" id="email" required><br><br>
+
         <label for="fecha">Fecha:</label><br>
         <input type="date" name="fecha" id="fecha" required><br><br>
 
@@ -31,6 +40,9 @@
             <option value="21:30">21:30</option>
             <option value="22:00">22:00</option>
         </select><br><br>
+
+        <label for="mensaje">Mensaje:</label><br>
+        <textarea name="mensaje" id="mensaje"></textarea><br><br>
 
         <button type="submit">Reservar</button>
     </form>

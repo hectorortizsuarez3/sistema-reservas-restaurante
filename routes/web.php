@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use illuminate\Http\Request;
+use Illuminate\Http\Request;
 use App\Models\Reserva;
 
 Route::get('/', function () {
@@ -19,9 +19,13 @@ Route::get('/reservas', function() {
 Route::post('/reservas', function(Request $request) {
     //1. Validar
     $validated = $request->validate([
+        'nombre'   => 'required|string|max:100',
+        'telefono' => 'required|string|max:20',
+        'email'    => 'required|email|max:255',
         'fecha'=> 'required|date|after_or_equal:today',
         'hora' => 'required|date_format:H:i',
-        'personas' => 'required|integer|min:1|max: 6',
+        'personas' => 'required|integer|min:1|max:6',
+        'mensaje'  => 'nullable|string|max:500',
     ]);
 
     //2. Guardar reseva

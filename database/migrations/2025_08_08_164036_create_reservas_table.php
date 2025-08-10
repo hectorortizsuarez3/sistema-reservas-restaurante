@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre', 100);
+            $table->string('telefono', 20);
+            $table->string('email', 255);
             $table->date('fecha');
             $table->time('hora');
-            $table->unsignedTinyInteger('Personas'); //max 6
+            $table->unsignedTinyInteger('personas'); //max 6
+            $table->text('mensaje')->nullable();
             $table->timestamps();  //created_at y updated_at
         });
     }
