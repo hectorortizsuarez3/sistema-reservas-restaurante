@@ -28,8 +28,39 @@ Route::post('/reservas', function(Request $request) {
         'mensaje'  => 'nullable|string|max:500',
     ]);
 
-    //2. Guardar reseva
-    Reserva::create($validated);
+    // 2) Determinar el turno según la hora solicitada
+    $hora = $validated['hora'];
+    $turnoMediodia = ['13:00','13:30','14:00','14:30'];
+    $turnoNoche    = ['21:00','21:30','22:00'];
+
+    if (in_array($hora, $turnoMediodia, true)) {
+        $horasTurno = $turnoMediodia;
+        $nombreTurno = 'mediodía';
+    } else {
+        $horasTurno = $turnoNoche;
+        $nombreTurno = 'noche';
+    }
+
+    // 3) Calcular ocupación actual del turno para esa fecha
+    $ocupacionActual = \App\Models\Reserva::query()
+        ->whereDate('fecha', $validated['fecha'])
+        ->whereIn('hora', $horasTurno)
+        ->sum('personas');
+
+    $capacidadTurno = 20;
+    $solicitadas = (int) $validated['personas'];
+
+    if ($ocupacionActual + $solicitadas > $capacidadTurno) {
+        $disponibles = max($capacidadTurno - $ocupacionActual, 0);
+        return back()
+            ->withErrors([
+                'personas' => "No hay suficientes plazas en el turno de $nombreTurno para el {$validated['fecha']}. Solo quedan $disponibles plazas disponibles."
+            ])
+            ->withInput();
+    }
+
+    //4. Guardar reseva
+    \App\Models\Reserva::create($validated);
 
     //3. Mostrar confirmación
     return back()->with('success', "Reserva realizada correctamente");
