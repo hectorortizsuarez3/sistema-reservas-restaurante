@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\Reserva;
+use Carbon\Carbon;
 
 Route::get('/', function () {
     return view('inicio');
@@ -52,9 +53,11 @@ Route::post('/reservas', function(Request $request) {
 
     if ($ocupacionActual + $solicitadas > $capacidadTurno) {
         $disponibles = max($capacidadTurno - $ocupacionActual, 0);
+        $fechaFormateada = Carbon::parse($validated['fecha'])->format('d-m-Y');
+
         return back()
             ->withErrors([
-                'personas' => "No hay suficientes plazas en el turno de $nombreTurno para el {$validated['fecha']}. Solo quedan $disponibles plazas disponibles."
+                'personas' => "No hay suficientes plazas en el turno de $nombreTurno para el $fechaFormateada. Solo quedan $disponibles plazas disponibles."
             ])
             ->withInput();
     }
