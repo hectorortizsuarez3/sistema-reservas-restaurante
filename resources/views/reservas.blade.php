@@ -3,6 +3,16 @@
 @section('content')
     <h1>Reservar mesa</h1>
 
+    {{-- Bloque global de errores --}}
+    @if ($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
+    {{-- Mensaje de éxito --}}
     @if(session('success'))
         <p>{{ session('success') }}</p>
     @endif
