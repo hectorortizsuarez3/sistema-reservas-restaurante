@@ -63,10 +63,11 @@ Route::post('/reservas', function(Request $request) {
     }
 
     //4. Guardar reseva
-    \App\Models\Reserva::create($validated);
+    $reserva = \App\Models\Reserva::create($validated);
 
-    //3. Mostrar confirmación
-    return back()->with('success', "Reserva realizada correctamente");
+    //5. Mostrar confirmación
+    return back()->with('success', "Reserva realizada correctamente.
+    Su número de reserva es <b>R-000{$reserva->id}</b>");
 })->name('reservas.enviar');
 
 Route::get('/contacto', function(){
