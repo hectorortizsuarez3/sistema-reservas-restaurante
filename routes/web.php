@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\Reserva;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservaConfirmada;
+
 
 Route::get('/', function () {
     return view('inicio');
@@ -64,6 +67,9 @@ Route::post('/reservas', function(Request $request) {
 
     //4. Guardar reseva
     $reserva = \App\Models\Reserva::create($validated);
+
+    //4.1 Enviar email de confirmación
+    Mail::to($reserva->email)->send(new ReservaConfirmada($reserva));
 
     //5. Mostrar confirmación
     return back()->with('success', "Reserva realizada correctamente.
