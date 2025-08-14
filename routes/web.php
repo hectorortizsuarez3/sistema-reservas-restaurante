@@ -6,16 +6,19 @@ use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservaConfirmada;
+use App\Http\Controllers\ContactController;
 
-
+//Pestaña de inicio
 Route::get('/', function () {
     return view('inicio');
 })->name('inicio');
 
+//Pestaña del menú
 Route::get('/menu', function() {
     return view('menu');
 })->name('menu');
 
+//Pestaña reservas
 Route::get('/reservas', function() {
     return view('reservas');
 })->name('reservas');
@@ -76,6 +79,13 @@ Route::post('/reservas', function(Request $request) {
     Su número de reserva es <b>R-000{$reserva->id}</b>");
 })->name('reservas.enviar');
 
+
+//Pestaña de contacto
 Route::get('/contacto', function(){
     return view('contacto');
 })->name('contacto');
+
+//Procesamiento del formulario:
+Route::post('/contacto', [ContactController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('contacto.enviar');
