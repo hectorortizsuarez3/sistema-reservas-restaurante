@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
     actualizarContador();
     mensaje.addEventListener('input', actualizarContador);
 
+{{-- Bloque para evitar que el usuario envíe dos veces el formulario por error--}}
     form.addEventListener('submit', function (e) {
-        // Deja que la validación nativa del navegador actúe
         if (!form.checkValidity()) return;
         // Si todo es válido, desactiva el botón para evitar duplicados
         enviarBtn.disabled = true;
