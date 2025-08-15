@@ -87,5 +87,5 @@ Route::get('/contacto', function(){
 
 //Procesamiento del formulario:
 Route::post('/contacto', [ContactController::class, 'store'])
-    ->middleware('throttle:5,1')
+    ->middleware('throttle:5,1')  //máximo 5 solicitudes/min/cliente
     ->name('contacto.enviar');

@@ -8,17 +8,7 @@
     O escribirnos su consulta desde este formulario:
     </p>
 
-{{-- Mensaje de éxito al enviar --}}
-@if (session('status'))
-    <div class="alert alert-success" role="alert">
-        {{ session('status') }}
-    </div>
-@endif
 
-{{-- Error general (por ejemplo, si falló el envío del correo) --}}
-@error('general')
-    <div class="alert alert-danger" role="alert">{{ $message }}</div>
-@enderror
 
 {{-- Errores de validación de campos --}}
 @if ($errors->any())
@@ -137,4 +127,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+<br>
+{{-- Mensaje de éxito al enviar --}}
+@if (session('status'))
+    <div class="alert alert-success" role="alert">
+        {{ session('status') }}
+    </div>
+@endif
+
+{{-- Error general (por ejemplo, si falló el envío del correo) --}}
+@error('general')
+    <div class="alert alert-danger" role="alert">{{ $message }}</div>
+@enderror
+
 @endsection
