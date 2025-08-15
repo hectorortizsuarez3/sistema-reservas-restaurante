@@ -24,7 +24,7 @@ class ContactController extends Controller
 
         try {
             // Construimos y enviamos el email. Se añade replyTo para poder responder con 1 clic.
-            Mail::to($to)->send(
+            Mail::to($to)->queue(
                 (new ContactMessage(
                     nombre:   $data['nombre'],
                     telefono: $data['telefono'] ?? null,
