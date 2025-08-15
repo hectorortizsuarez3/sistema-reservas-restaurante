@@ -72,7 +72,7 @@ Route::post('/reservas', function(Request $request) {
     $reserva = \App\Models\Reserva::create($validated);
 
     //4.1 Enviar email de confirmación
-    Mail::to($reserva->email)->send(new ReservaConfirmada($reserva));
+    Mail::to($reserva->email)->queue(new ReservaConfirmada($reserva));
 
     //5. Mostrar confirmación
     return back()->with('success', "Reserva realizada correctamente.
