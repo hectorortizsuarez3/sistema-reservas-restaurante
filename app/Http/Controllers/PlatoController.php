@@ -18,8 +18,19 @@ class PlatoController extends Controller
             ->get()
             ->groupBy('categoria');
 
-        return view('menu', compact('platos'));
+            //Definimos el orden deseado
+     // Definimos el orden deseado
+    $ordenCategorias = ['entrantes', 'principales', 'postres', 'bebidas'];
+
+    // Reordenamos según ese array
+    $platosOrdenados = collect($ordenCategorias)
+        ->filter(fn($cat) => $platos->has($cat)) // solo categorías existentes
+        ->mapWithKeys(fn($cat) => [$cat => $platos[$cat]]);
+
+    return view('menu', ['platos' => $platosOrdenados]);
     }
+
+
 
     /**
      * Formulario para crear un plato (uso interno).
