@@ -16,9 +16,7 @@ Route::get('/', function () {
 })->name('inicio');
 
 //Rutas del menu
-//menu público que apunte al index de PlatoController
 Route::get('/menu', [PlatoController::class, 'index'])->name('menu');
-//Rutas de administración mínima para platos (solo create y store, mas index que ya usamos)
 Route::resource('platos', PlatoController::class)->only(['index', 'create', 'store']);
 
 

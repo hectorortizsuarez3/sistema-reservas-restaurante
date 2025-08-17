@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->text('descripcion')->nullable();
             $table->decimal('precio', 8, 2);
-            $table->string('categoria')->index(); // entrantes, principales, postres, bebidas...
+            $table->string('categoria');
             $table->string('imagen_path')->nullable(); // ruta relativa en disco 'public'
             $table->timestamps();
         });
