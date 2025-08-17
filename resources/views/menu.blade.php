@@ -37,8 +37,4 @@
     <p>No hay datos de menú.</p>
 @endisset
 
-{{-- Enlace rápido para crear (opcional, para ti) --}}
-<p style="margin-top:2rem;">
-    <a href="{{ route('platos.create') }}">➕ Añadir plato</a>
-</p>
 @endsection
