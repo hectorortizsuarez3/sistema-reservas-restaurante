@@ -35,3 +35,11 @@ Route::get('/contacto', function(){
 Route::post('/contacto', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')  //máximo 5 solicitudes/min/cliente
     ->name('contacto.enviar');
+
+//Rutas para ver las reservas (solo para gerencia)
+use App\Http\Controllers\GerenciaReservasController;
+
+Route::prefix('gerencia')->name('gerencia.')->group(function () {
+    Route::get('/reservas', [GerenciaReservasController::class, 'index'])
+        ->name('reservas.index');
+});
