@@ -6,26 +6,30 @@
 
     {{-- Turnos --}}
     <div>
-        <a href="{{ route('gerencia.reservas.index', ['day' => $dayOffset, 'shift' => 'mediodia']) }}"
+        <a href="{{ route('gerencia.reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'mediodia']) }}"
            style="padding:0.4rem 0.8rem; border:1px solid #ccc; border-radius:6px; text-decoration:none; {{ $shiftKey==='mediodia' ? 'background:#eee;' : '' }}">
            Mediodía (M)
         </a>
-        <a href="{{ route('gerencia.reservas.index', ['day' => $dayOffset, 'shift' => 'noche']) }}"
+        <a href="{{ route('gerencia.reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'noche']) }}"
            style="padding:0.4rem 0.8rem; border:1px solid #ccc; border-radius:6px; text-decoration:none; {{ $shiftKey==='noche' ? 'background:#eee;' : '' }}">
            Noche (N)
         </a>
     </div>
 
-    {{-- Días: hoy + 10 --}}
-    <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-        @foreach ($dias as $d)
-            <a href="{{ route('gerencia.reservas.index', ['day' => $d['offset'], 'shift' => $shiftKey]) }}"
-               title="{{ $d['full'] }}"
-               style="padding:0.3rem 0.6rem; border:1px solid #ccc; border-radius:6px; text-decoration:none; font-size:0.95rem; {{ $d['offset']===$dayOffset ? 'background:#ddd; font-weight:bold;' : '' }}">
-               {{ $d['label'] }}
-            </a>
-        @endforeach
-    </div>
+    {{-- Calendario (input type="date" sin límites) --}}
+    <form method="GET" action="{{ route('gerencia.reservas.index') }}" style="display:flex; align-items:center; gap:0.6rem;">
+        <input type="hidden" name="shift" value="{{ $shiftKey }}">
+        <label for="date" style="font-weight:600;">Fecha:</label>
+        <input
+            id="date"
+            type="date"
+            name="date"
+            value="{{ $targetDate->toDateString() }}"
+            style="padding:0.35rem; border:1px solid #ccc; border-radius:6px;"
+            onchange="this.form.submit()"
+        >
+        <noscript><button type="submit">Ver</button></noscript>
+    </form>
 </div>
 
 <hr style="margin:1rem 0;">
@@ -66,24 +70,29 @@
                     </div>
 
                     @if ($slot['count'] > 0)
-                        <div style="margin-top:0.4rem;">
+                        <div style="margin-top:0.4rem; display:flex; flex-direction:column; gap:0.3rem;">
                             @foreach ($slot['reservas'] as $r)
-                                <div style="display:flex; gap:0.8rem; align-items:center; font-size:0.95rem;">
-                                    <span>#{{ $r->id }}</span>
-                                    <span>🧑 {{ $r->personas }}</span>
-                                    @if (!empty($r->nombre))
-                                        <span>· {{ $r->nombre }}</span>
-                                    @endif
-                                    @if (!empty($r->telefono))
-                                        <span>· 📞 {{ $r->telefono }}</span>
-                                    @endif
-                                    @if (!empty($r->email))
-                                        <span>· ✉️ {{ $r->email }}</span>
+                                <div style="padding:0.4rem 0.6rem; border:1px solid #eee; border-radius:6px;">
+                                    <div style="display:flex; gap:0.8rem; align-items:center; font-size:0.95rem;">
+                                        <span>#{{ $r->id }}</span>
+                                        <span>🧑 {{ $r->personas }}</span>
+                                        @if (!empty($r->nombre))
+                                            <span>· {{ $r->nombre }}</span>
+                                        @endif
+                                        @if (!empty($r->telefono))
+                                            <span>· 📞 {{ $r->telefono }}</span>
+                                        @endif
+                                        @if (!empty($r->email))
+                                            <span>· ✉️ {{ $r->email }}</span>
+                                        @endif
+                                    </div>
+                                    @if (!empty($r->mensaje))
+                                        <div style="margin-top:0.35rem; font-size:0.92rem; color:#444;">
+                                            <span style="opacity:0.8;">📝 Mensaje:</span>
+                                            <div>{!! nl2br(e($r->mensaje)) !!}</div>
+                                        </div>
                                     @endif
                                 </div>
-                                @if (!empty($r->mensaje))
-                                        <span>· ✉️ {{ $r->mensaje }}</span>
-                                    @endif
                             @endforeach
                         </div>
                     @else
@@ -97,29 +106,37 @@
     </div>
 </div>
 
-{{-- JS: atajos de teclado para cambiar día/turno sin ratón --}}
+{{-- JS: atajos de teclado para navegar fechas y turnos --}}
 <script>
 document.addEventListener('keydown', function(e) {
-    const params = new URLSearchParams(window.location.search);
-    let day = parseInt(params.get('day') || '0', 10);
-    let shift = params.get('shift') || '{{ $shiftKey }}';
+    const dateInput = document.getElementById('date');
+    const current = new Date(dateInput.value || new Date().toISOString().slice(0,10));
+    // Helper para formatear YYYY-MM-DD
+    const f = d => {
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const day = String(d.getDate()).padStart(2,'0');
+        return `${d.getFullYear()}-${m}-${day}`;
+    };
+
+    let shift = '{{ $shiftKey }}';
 
     if (e.key === 'ArrowRight') {
-        day = Math.min(day + 1, {{ config('reservas.days_ahead', 10) }});
-        window.location = `{{ route('gerencia.reservas.index') }}?day=${day}&shift=${shift}`;
+        current.setDate(current.getDate() + 1);
+        window.location = `{{ route('gerencia.reservas.index') }}?date=${f(current)}&shift=${shift}`;
     }
     if (e.key === 'ArrowLeft') {
-        day = Math.max(day - 1, 0);
-        window.location = `{{ route('gerencia.reservas.index') }}?day=${day}&shift=${shift}`;
+        current.setDate(current.getDate() - 1);
+        window.location = `{{ route('gerencia.reservas.index') }}?date=${f(current)}&shift=${shift}`;
     }
     if (e.key.toLowerCase() === 'm') {
         shift = 'mediodia';
-        window.location = `{{ route('gerencia.reservas.index') }}?day=${day}&shift=${shift}`;
+        window.location = `{{ route('gerencia.reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
     }
     if (e.key.toLowerCase() === 'n') {
         shift = 'noche';
-        window.location = `{{ route('gerencia.reservas.index') }}?day=${day}&shift=${shift}`;
+        window.location = `{{ route('gerencia.reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
     }
 });
 </script>
 @endsection
+

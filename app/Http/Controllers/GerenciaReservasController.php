@@ -10,30 +10,36 @@ class GerenciaReservasController extends Controller
 {
     public function index(Request $request)
     {
-        // --- 1) Leer configuración ---
-        $daysAhead = (int) config('reservas.days_ahead', 10);
+        // --- 1) Configuración ---
         $slotsCfg  = config('reservas.slots');
         $capacity  = (int) config('reservas.capacity_per_shift', 20);
 
         // --- 2) Parámetros de UI ---
-        $dayOffset = (int) $request->query('day', 0);       // 0 = hoy
-        $shiftKey  = $request->query('shift', 'mediodia');  // 'mediodia' | 'noche'
-
-        // Saneamos
-        $dayOffset = max(0, min($daysAhead, $dayOffset));
+        // Turno: 'mediodia' | 'noche'
+        $shiftKey = $request->query('shift', 'mediodia');
         if (! array_key_exists($shiftKey, $slotsCfg)) {
             $shiftKey = 'mediodia';
         }
 
-        // --- 3) Fecha objetivo y slots del turno seleccionado ---
-        $today      = Carbon::today();                 // respeta timezone de config/app.php
-        $targetDate = $today->clone()->addDays($dayOffset);
-        $slots      = $slotsCfg[$shiftKey];            // p.ej. ['13:00','13:30','14:00','14:30']
+        // Fecha: 'YYYY-MM-DD'. Si no viene o es inválida, usamos HOY.
+        $today = Carbon::today();
+        $dateStr = $request->query('date');
+        try {
+            $targetDate = $dateStr ? Carbon::parse($dateStr)->startOfDay() : $today->clone();
+        } catch (\Exception $e) {
+            $targetDate = $today->clone();
+        }
 
-        // --- 4) Traer reservas del día para esos slots (y solo esos) ---
+        // --- 3) Slots del turno seleccionado ---
+        $slots = $slotsCfg[$shiftKey];          // p.ej. ['13:00','13:30','14:00','14:30']
+        $start = reset($slots);                 // '13:00'
+        $end   = end($slots);                   // '14:30' (o último de la lista)
+
+        // --- 4) Traer reservas del día por RANGO de hora ---
         $reservas = Reserva::query()
             ->whereDate('fecha', $targetDate->toDateString())
-            ->whereIn('hora', $slots)
+            ->whereTime('hora', '>=', $start)
+            ->whereTime('hora', '<=', $end)
             ->orderBy('hora')
             ->get();
 
@@ -42,9 +48,13 @@ class GerenciaReservasController extends Controller
         $totalReservas = (int) $reservas->count();
         $ocupacionPct  = $capacity > 0 ? round(($totalPersonas / $capacity) * 100) : 0;
 
-        // --- 6) Estructura por slot (incluye slots sin reservas) ---
+        // --- 6) Estructura por slot (incluye slots sin reservas; normalizamos a HH:MM) ---
         $porSlot = collect($slots)->mapWithKeys(function ($hhmm) use ($reservas) {
-            $lista = $reservas->where('hora', $hhmm);
+            $lista = $reservas->filter(function ($r) use ($hhmm) {
+                $h = substr((string) $r->hora, 0, 5); // '13:00:00' -> '13:00'
+                return $h === $hhmm;
+            });
+
             return [
                 $hhmm => [
                     'hora'         => $hhmm,
@@ -55,22 +65,9 @@ class GerenciaReservasController extends Controller
             ];
         });
 
-        // --- 7) Lista de días (0..daysAhead) para pintar botones ---
-        $dias = collect(range(0, $daysAhead))->map(function ($offset) use ($today) {
-            $d = $today->clone()->addDays($offset);
-            return [
-                'offset' => $offset,
-                'iso'    => $d->toDateString(),                 // 2025-08-18
-                'label'  => $d->isoFormat('ddd D/M'),           // lun 18/8
-                'full'   => $d->isoFormat('dddd D [de] MMMM'),  // lunes 18 de agosto
-            ];
-        });
-
         return view('gerencia.reservas.index', [
-            'dias'          => $dias,
             'shiftKey'      => $shiftKey,
-            'dayOffset'     => $dayOffset,
-            'porSlot'       => $porSlot,        // mapa con TODOS los slots del turno
+            'porSlot'       => $porSlot,
             'totalPersonas' => $totalPersonas,
             'totalReservas' => $totalReservas,
             'capacity'      => $capacity,
@@ -79,3 +76,4 @@ class GerenciaReservasController extends Controller
         ]);
     }
 }
+
