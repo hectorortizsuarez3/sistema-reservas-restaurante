@@ -81,6 +81,9 @@
                                         <span>· ✉️ {{ $r->email }}</span>
                                     @endif
                                 </div>
+                                @if (!empty($r->mensaje))
+                                        <span>· ✉️ {{ $r->mensaje }}</span>
+                                    @endif
                             @endforeach
                         </div>
                     @else
