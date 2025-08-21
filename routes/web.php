@@ -38,7 +38,5 @@ Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contacto.enviar');
 
 //Rutas para ver las reservas (solo para gerencia)
-Route::prefix('gerencia')->name('gerencia.')->group(function () {
-    Route::get('/reservas', [GerenciaReservasController::class, 'index'])
-        ->name('reservas.index');
-});
+Route::get('/gerencia/reservas', [GerenciaReservasController::class, 'index'])
+    ->name('reservas.index');

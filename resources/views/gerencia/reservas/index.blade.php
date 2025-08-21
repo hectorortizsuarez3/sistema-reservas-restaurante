@@ -6,18 +6,18 @@
 
     {{-- Turnos --}}
     <div>
-        <a href="{{ route('gerencia.reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'mediodia']) }}"
+        <a href="{{ route('reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'mediodia']) }}"
            style="padding:0.4rem 0.8rem; border:1px solid #ccc; border-radius:6px; text-decoration:none; {{ $shiftKey==='mediodia' ? 'background:#eee;' : '' }}">
            Mediodía (M)
         </a>
-        <a href="{{ route('gerencia.reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'noche']) }}"
+        <a href="{{ route('reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'noche']) }}"
            style="padding:0.4rem 0.8rem; border:1px solid #ccc; border-radius:6px; text-decoration:none; {{ $shiftKey==='noche' ? 'background:#eee;' : '' }}">
            Noche (N)
         </a>
     </div>
 
     {{-- Calendario (input type="date" sin límites) --}}
-    <form method="GET" action="{{ route('gerencia.reservas.index') }}" style="display:flex; align-items:center; gap:0.6rem;">
+    <form method="GET" action="{{ route('reservas.index') }}" style="display:flex; align-items:center; gap:0.6rem;">
         <input type="hidden" name="shift" value="{{ $shiftKey }}">
         <label for="date" style="font-weight:600;">Fecha:</label>
         <input
@@ -122,19 +122,19 @@ document.addEventListener('keydown', function(e) {
 
     if (e.key === 'ArrowRight') {
         current.setDate(current.getDate() + 1);
-        window.location = `{{ route('gerencia.reservas.index') }}?date=${f(current)}&shift=${shift}`;
+        window.location = `{{ route('reservas.index') }}?date=${f(current)}&shift=${shift}`;
     }
     if (e.key === 'ArrowLeft') {
         current.setDate(current.getDate() - 1);
-        window.location = `{{ route('gerencia.reservas.index') }}?date=${f(current)}&shift=${shift}`;
+        window.location = `{{ route('reservas.index') }}?date=${f(current)}&shift=${shift}`;
     }
     if (e.key.toLowerCase() === 'm') {
         shift = 'mediodia';
-        window.location = `{{ route('gerencia.reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
+        window.location = `{{ route('reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
     }
     if (e.key.toLowerCase() === 'n') {
         shift = 'noche';
-        window.location = `{{ route('gerencia.reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
+        window.location = `{{ route('reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
     }
 });
 </script>
