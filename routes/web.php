@@ -9,6 +9,7 @@ use App\Mail\ReservaConfirmada;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\PlatoController;
+use App\Http\Controllers\GerenciaReservasController;
 
 //Pestaña de inicio
 Route::get('/', function () {
@@ -37,8 +38,6 @@ Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contacto.enviar');
 
 //Rutas para ver las reservas (solo para gerencia)
-use App\Http\Controllers\GerenciaReservasController;
-
 Route::prefix('gerencia')->name('gerencia.')->group(function () {
     Route::get('/reservas', [GerenciaReservasController::class, 'index'])
         ->name('reservas.index');

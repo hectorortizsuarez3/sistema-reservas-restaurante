@@ -1,9 +1,6 @@
 <?php
 
 return [
-    // Mostrar hoy + 10 días
-    'days_ahead' => 10,
-
     // Capacidad total del turno (suma de todos los slots de ese turno)
     'capacity_per_shift' => 20,
 
