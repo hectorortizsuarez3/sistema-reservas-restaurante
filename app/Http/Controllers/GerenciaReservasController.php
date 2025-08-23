@@ -14,8 +14,7 @@ class GerenciaReservasController extends Controller
         $slotsCfg  = config('reservas.slots');
         $capacity  = (int) config('reservas.capacity_per_shift', 20);
 
-        // --- 2) Parámetros de UI ---
-        // Turno: 'mediodia' | 'noche'
+        // Elección del turno a visualizar (mediodía por defecto)
         $shiftKey = $request->query('shift', 'mediodia');
         if (! array_key_exists($shiftKey, $slotsCfg)) {
             $shiftKey = 'mediodia';
@@ -30,10 +29,10 @@ class GerenciaReservasController extends Controller
             $targetDate = $today->clone();
         }
 
-        // --- 3) Slots del turno seleccionado ---
-        $slots = $slotsCfg[$shiftKey];          // p.ej. ['13:00','13:30','14:00','14:30']
-        $start = reset($slots);                 // '13:00'
-        $end   = end($slots);                   // '14:30' (o último de la lista)
+        // 3) Slots del turno seleccionado 
+        $slots = $slotsCfg[$shiftKey]; // p.ej. ['13:00','13:30','14:00','14:30']
+        $start = reset($slots);        // '13:00'
+        $end   = end($slots);          // '14:30' (o último de la lista)
 
         // --- 4) Traer reservas del día por RANGO de hora ---
         $reservas = Reserva::query()
@@ -48,7 +47,7 @@ class GerenciaReservasController extends Controller
         $totalReservas = (int) $reservas->count();
         $ocupacionPct  = $capacity > 0 ? round(($totalPersonas / $capacity) * 100) : 0;
 
-        // --- 6) Estructura por slot (incluye slots sin reservas; normalizamos a HH:MM) ---
+        // 6) Estructura por slot (incluye slots sin reservas; normalizamos a HH:MM)
         $porSlot = collect($slots)->mapWithKeys(function ($hhmm) use ($reservas) {
             $lista = $reservas->filter(function ($r) use ($hhmm) {
                 $h = substr((string) $r->hora, 0, 5); // '13:00:00' -> '13:00'

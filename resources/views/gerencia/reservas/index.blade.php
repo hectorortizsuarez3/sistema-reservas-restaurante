@@ -4,7 +4,7 @@
 <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
     <h1>Reservas (gerencia)</h1>
 
-    {{-- Turnos --}}
+    <!---Enlaces para cambiar entre turnos manteniendo la fecha actual--->
     <div>
         <a href="{{ route('reservas.index', ['date' => $targetDate->toDateString(), 'shift' => 'mediodia']) }}"
            style="padding:0.4rem 0.8rem; border:1px solid #ccc; border-radius:6px; text-decoration:none; {{ $shiftKey==='mediodia' ? 'background:#eee;' : '' }}">
@@ -16,7 +16,7 @@
         </a>
     </div>
 
-    {{-- Calendario (input type="date" sin límites) --}}
+    <!-- Calendario para elegir fecha -->
     <form method="GET" action="{{ route('reservas.index') }}" style="display:flex; align-items:center; gap:0.6rem;">
         <input type="hidden" name="shift" value="{{ $shiftKey }}">
         <label for="date" style="font-weight:600;">Fecha:</label>
@@ -34,7 +34,7 @@
 
 <hr style="margin:1rem 0;">
 
-{{-- Resumen del turno seleccionado --}}
+<!-- Resumen del turno seleccionado -->
 <p style="margin:0.5rem 0;">
     <strong>Día:</strong> {{ $targetDate->isoFormat('dddd D [de] MMMM') }} |
     <strong>Turno:</strong> {{ ucfirst($shiftKey) }} |
@@ -42,6 +42,7 @@
     <strong>Reservadas:</strong> {{ $totalPersonas }} ({{ $ocupacionPct }}%)
 </p>
 
+<!--Tarjeta lateral con resumen del nº de reservas-->
 <div style="display:flex; gap:2rem; flex-wrap:wrap; align-items:flex-start;">
     <div style="min-width:260px;">
         <div style="padding:0.8rem; border:1px solid #ddd; border-radius:8px;">
@@ -50,14 +51,14 @@
             <p style="margin:0.2rem 0;"><strong>Total personas:</strong> {{ $totalPersonas }}</p>
         </div>
 
-        {{-- Atajos --}}
+        <!-- Texto informativo -->
         <div style="margin-top:0.8rem; font-size:0.9rem; color:#666;">
             Atajos: ← día anterior · → día siguiente · M mediodía · N noche
         </div>
     </div>
 
     <div style="flex:1;">
-        <h3 style="margin-top:0;">Ocupación por slot</h3>
+        <h3 style="margin-top:0;">Reservas por hora</h3>
 
         <ul style="list-style:none; padding-left:0;">
             @foreach ($porSlot as $slot)
@@ -106,37 +107,10 @@
     </div>
 </div>
 
-{{-- JS: atajos de teclado para navegar fechas y turnos --}}
+<!-- JS: atajos de teclado para navegar fechas y turnos -->
 <script>
-document.addEventListener('keydown', function(e) {
-    const dateInput = document.getElementById('date');
-    const current = new Date(dateInput.value || new Date().toISOString().slice(0,10));
-    // Helper para formatear YYYY-MM-DD
-    const f = d => {
-        const m = String(d.getMonth()+1).padStart(2,'0');
-        const day = String(d.getDate()).padStart(2,'0');
-        return `${d.getFullYear()}-${m}-${day}`;
-    };
-
-    let shift = '{{ $shiftKey }}';
-
-    if (e.key === 'ArrowRight') {
-        current.setDate(current.getDate() + 1);
-        window.location = `{{ route('reservas.index') }}?date=${f(current)}&shift=${shift}`;
-    }
-    if (e.key === 'ArrowLeft') {
-        current.setDate(current.getDate() - 1);
-        window.location = `{{ route('reservas.index') }}?date=${f(current)}&shift=${shift}`;
-    }
-    if (e.key.toLowerCase() === 'm') {
-        shift = 'mediodia';
-        window.location = `{{ route('reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
-    }
-    if (e.key.toLowerCase() === 'n') {
-        shift = 'noche';
-        window.location = `{{ route('reservas.index') }}?date=${dateInput.value}&shift=${shift}`;
-    }
-});
+    window.shiftKeyBlade = "{{ $shiftKey }}";
+    window.routeReservas = "{{ route('reservas.index') }}";
 </script>
 @endsection
 

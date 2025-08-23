@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     
-    <!--link bootstrap desactivado-->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <!--link bootstrap activado-->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <title>Restaurante Laravel</title>
+
+    <!--Damos la instrucción a laravel para que cargue todos los archivos app.js (app.css aún no)
+    en todas las vistas que extiendan de layout-->
+    @vite(['resources/js/app.js'])
 </head>
 <body>
 
