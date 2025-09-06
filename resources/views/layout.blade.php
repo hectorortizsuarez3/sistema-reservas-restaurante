@@ -2,9 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    
-    <!--link bootstrap activado-->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <!-- link bootstrap desactivado: <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <title>Restaurante Laravel</title>
 
     <!--Damos la instrucción a laravel para que cargue todos los archivos app.js (app.css aún no)
