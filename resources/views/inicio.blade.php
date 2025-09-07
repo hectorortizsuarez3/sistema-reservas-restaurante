@@ -1,15 +1,17 @@
 @extends('layout')
 
 @section('content')
-        <section>
+    <section>
         <h1>Bienvenido a Cuatro Caminos</h1>
         <p>Sabores mediterráneos con productos frescos de temporada.</p>
-        <img src="{{ asset('storage/portada/entrada_restaurante.jpeg') }}" alt="Foto de la entrada"><br>
-        <p>En pleno centro de Madrid.</p>
         <img src="{{ asset('storage/portada/interior_restaurante.jpg') }}" alt="Foto del interior">
+        
+        <p>En pleno centro de Madrid.</p>
+        <img src="{{ asset('storage/portada/entrada_restaurante.jpeg') }}" alt="Foto de la entrada"><br>
     </section>
 
     <section>
+        <h2>Nuestra Historia</h2>
         <p>
             Cuatro Caminos nació como un proyecto familiar movido por la idea de recuperar el sabor de las recetas de siempre y compartirlo en un ambiente cercano. Con el tiempo se ha convertido en un punto de encuentro del barrio: un lugar donde celebrar, charlar y comer bien sin prisas. Hemos crecido, pero seguimos cocinando con el mismo cariño y con el compromiso de trabajar cada temporada con los mejores productos.
         </p>

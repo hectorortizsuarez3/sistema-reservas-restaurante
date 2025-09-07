@@ -7,7 +7,7 @@
 
     <!--Damos la instrucción a laravel para que cargue todos los archivos app.js (app.css aún no)
     en todas las vistas que extiendan de layout-->
-    @vite(['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
