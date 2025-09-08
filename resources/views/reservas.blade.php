@@ -45,16 +45,18 @@
 
     {{-- Bloque global de errores --}}
     @if ($errors->any())
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+       <div class="alert alert-danger" role="alert">
+    <ul style="margin:0; padding-left:1.25rem;">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div> 
     @endif
 
     {{-- Mensaje de éxito --}}
     @if(session('success'))
-        <p>{!! session('success') !!}</p>
+        <div class="alert alert-success" role="status">{!! session('success') !!}</div>
     @endif
 
 @endsection

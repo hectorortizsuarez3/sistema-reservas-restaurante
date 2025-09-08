@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <section>
+    <section class="portada">
         <h1>Bienvenido a Cuatro Caminos</h1>
         <p>Sabores mediterráneos con productos frescos de temporada.</p>
         <img src="{{ asset('storage/portada/interior_restaurante.jpg') }}" alt="Foto del interior">
