@@ -27,7 +27,13 @@ public function create() {
             'hora' => 'required|date_format:H:i',
             'personas' => 'required|integer|min:1|max:6',
             'mensaje'  => 'nullable|string|max:500',
-        ]);
+        ],
+        //Mensaje personalizado en caso de fecha pasada
+        [
+        'fecha.after_or_equal' => 'La fecha debe ser igual o posterior a hoy.'
+        ]
+    
+    );
 
         // Determinar turno
         $hora = $validated['hora'];
