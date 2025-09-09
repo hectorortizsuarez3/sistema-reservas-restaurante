@@ -45,12 +45,14 @@
       <td style="text-align:center; white-space:nowrap;">
         <a href="{{ route('platos.edit', $plato) }}">Editar</a>
         &nbsp;|&nbsp;
+        
         <form action="{{ route('platos.destroy', $plato) }}" method="POST" style="display:inline"
-              onsubmit="return confirm('¿Eliminar \"{{ $plato->nombre }}\"?');">
-          @csrf
-          @method('DELETE')
-          <button type="submit">Eliminar</button>
+            onsubmit="return confirm('¿Seguro que quieres eliminar el plato {{ $plato->nombre }}?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Eliminar</button>
         </form>
+
       </td>
     </tr>
   @empty
