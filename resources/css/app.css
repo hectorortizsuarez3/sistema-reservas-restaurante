@@ -82,5 +82,17 @@ button:disabled{ opacity:.6; cursor:not-allowed }
 .alert-danger{ background:#fef2f2; border-color:#fecaca }
 .alert-warning{ background:#fff7ed; border-color:#fed7aa }
 
+/* Aviso de privacidad */
+.legal-mini{
+  background: #fbfdff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: .8rem 1rem;
+  margin-top: 2rem;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.legal-mini strong{ font-weight: 600 }
+
 
 

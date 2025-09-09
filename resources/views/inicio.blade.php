@@ -39,6 +39,28 @@
         <h2>Dirección</h2>
         <p>📍 Calle Ejemplo, 123 – Madrid</p>
     </section>
+
+    <section>
+        <h2>Horario</h2>
+        <p>
+            Abierto todos los días:<br>
+            13:00 – 16:00 | 20:00 – 23:30
+        </p>
+        <h2>Dirección</h2>
+        <p>📍 Calle Ejemplo, 123 – Madrid</p>
+    </section>
+
+    {{-- Bloque de privacidad básico RGPD --}}
+    <section aria-label="Privacidad" class="legal-mini">
+        <h3>Aviso de privacidad y gestión de datos personales</h2>
+        <p>
+            Tus reservas y datos de contacto se tratarán de forma privada para gestionar tu solicitud. 
+            Conservamos esta información durante <strong>36 meses</strong> y después la eliminamos o 
+            anonimizamos de forma segura. No cederemos tus datos a terceros salvo obligación legal. 
+            Más detalles disponibles a petición en el restaurante.
+        </p>
+    </section>
+
 @endsection
 
 
