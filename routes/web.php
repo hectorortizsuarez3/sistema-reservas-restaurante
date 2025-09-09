@@ -17,11 +17,15 @@ Route::get('/', function () {
 })->name('inicio');
 
 //Rutas del menu
+    //Ruta pública
 Route::get('/menu', [PlatoController::class, 'index'])->name('menu');
-Route::resource('platos', PlatoController::class)
-    ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
-Route::get('/platos/editar', [PlatoController::class, 'manage'])->name('platos.manage');
 
+    //Rutas internas (protegidas con autenticación básica)
+Route::middleware('auth.basic')->group(function () {
+    Route::get('/platos/editar', [PlatoController::class, 'manage'])->name('platos.manage');
+    Route::resource('platos', PlatoController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+});
 
 
 
@@ -40,5 +44,7 @@ Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contacto.enviar');
 
 //Rutas para ver las reservas (solo para gerencia)
-Route::get('/gerencia/reservas', [GerenciaReservasController::class, 'index'])
-    ->name('reservas.index');
+Route::middleware('auth.basic')->group(function () {
+    Route::get('/gerencia/reservas', [GerenciaReservasController::class, 'index'])
+        ->name('reservas.index');
+});
