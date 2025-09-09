@@ -18,7 +18,9 @@ Route::get('/', function () {
 
 //Rutas del menu
 Route::get('/menu', [PlatoController::class, 'index'])->name('menu');
-Route::resource('platos', PlatoController::class)->only(['index', 'create', 'store']);
+Route::resource('platos', PlatoController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+Route::get('/platos/editar', [PlatoController::class, 'manage'])->name('platos.manage');
 
 
 
