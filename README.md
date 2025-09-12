@@ -3,6 +3,9 @@ Proyecto: Sistema de reservas para restaurante 🍽️
 Este es un proyecto personal desarrollado durante el verano de 2025 con fines de práctica y aprendizaje.
 La aplicación está construida con Laravel, HTML, CSS y JavaScript.
 
+Imágenes del proyecto:
+Puedes ver imágenes del frontend del proyecto en la carpeta Hector/imagenes
+
 📑 Secciones públicas
 
 Inicio: presentación del restaurante, su filosofía y ubicación.
